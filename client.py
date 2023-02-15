@@ -17,3 +17,6 @@ while True:
         client_response = str(s.recv(1024),"utf-8")
         print(client_response, end="")
 
+    if cmd == "quit":
+        s.send(str.encode(cmd))
+        break

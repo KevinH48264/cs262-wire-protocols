@@ -4,6 +4,7 @@ import os
 import subprocess
 
 
+
 # Create a Socket ( connect two computers)
 def create_socket():
     try:
@@ -50,20 +51,24 @@ def receive_commands(conn):
         data = conn.recv(1024)
         input_cmd = data.decode("utf-8")
         res = "Waiting for valid response..."
+
+        # b - allow client to 1. create an account and supply a unique user name
         if 'create_account' in input_cmd:
             res = "create_account"
 
+        # b - allow clients to log in
+
+        # b - allow client to list accounts by text wildcard
+
+        # k - allow client to send a message to a recipient, and queue if the recipient isn't logged in
+
+        # k - server delivers undelivered messages to a particular user if they logged in
+
+        # b- allow client to delete an account
+
+        # k - allow clients to quit connection
+
         conn.send(str.encode(res))
-
-        # allow client to 1. create an account and supply a unique user name
-
-        # allow client to list accounts by text wildcard
-
-        # allow client to send a message to a recipient, and queue if the recipient isn't logged in
-
-        # server delivers undelivered messages to a particular user if they logged in
-
-        # allow client to delete an account
 
 
 def main():
