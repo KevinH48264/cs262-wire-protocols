@@ -51,11 +51,12 @@ def socket_accept():
         print("Connection has been established! |" + " IP " + address[0] + " | Port" + str(address[1]))
 
         # allow for multiple connections to be made
-        _thread.start_new_thread(receive_commands, (conn, address))
+        _thread.start_new_thread(receive_commands, (conn,))
     s.close()
 
 # Send commands to client/victim or a friend
 def receive_commands(conn):
+    conn.send(str.encode("YOU ARE SUCCESSFULLY CONNECTED TO THE SERVER! Instructions here: TBD \n"))
     # TODO: Edit this so that user can create account, and the other stuff.
     while True:
         print("current info: ", accounts, queues)
@@ -88,22 +89,19 @@ def receive_commands(conn):
         # k - allow client to send a message to a recipient, and queue if the recipient isn't logged in
         # to send a message: "send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]"
         if 'send_message_to ' in input_cmd:
-            res = send_message(input_cmd)
-
+            res = send_message(input_cmd, conn)
 
         # b - allow client to delete an account
         if 'delete_account' in input_cmd:
-            # delete_account + space is 15 characters
-            username = input_cmd[15:]
-            res = delete_account(username, conn)
+            res = delete_account(conn)
 
         # k - allow clients to quit connection
         if 'quit' in input_cmd[:4]:
             # mark that the sender has closed their connection
-            sender = accounts.keys()[accounts.values().index(conn)]
+            sender = list(accounts.keys())[list(accounts.values()).index(conn)]
             accounts[sender] = None
 
-        conn.send(str.encode(res))
+        conn.send(str.encode(res + "\n"))
 
 def check_queue(user, conn):
     # send messages to user
@@ -118,7 +116,7 @@ def send_message(input_cmd, conn):
     recipient = input_cmd[17:input_cmd.find("message: ")]
     message = input_cmd[input_cmd.find("message: ") + 9:]
 
-    if recipient in accounts.keys(): 
+    if recipient in list(accounts.keys()): 
         # recipient exists
         recipient_conn = accounts[recipient]
         
@@ -127,7 +125,7 @@ def send_message(input_cmd, conn):
             recipient_conn.send(str.encode(message))
         else:
             # recipient is offline and message should be stored in queue
-            sender = accounts.keys()[accounts.values().index(conn)]
+            sender = list(accounts.keys())[list(accounts.values()).index(conn)]
             queues[recipient] = queues[recipient].append([sender + " sent you a message: " + message])
     else:
         # recipient does not exist
@@ -136,14 +134,14 @@ def send_message(input_cmd, conn):
     return res
 
 def log_in(username, conn):
-    if accounts.has_key(username):
+    if username in list(accounts.keys()):
         accounts[username] = conn
         return "{} is successfully logged in!".format(username)
     else:
         return "This account does not exist, but the username is available. Please create an account first."
 
-def create_account(username, conn)
-    if accounts.has_key(username):
+def create_account(username, conn):
+    if username in list(accounts.keys()):
         return "This username already exists. If this is your account, please log in. If not, create an account with a different username."
     else:
         accounts[username] = conn
@@ -152,7 +150,7 @@ def create_account(username, conn)
 
 def delete_account(conn):
     try:
-        account_to_be_deleted = accounts.keys()[accounts.values().index(conn)]
+        account_to_be_deleted = list(accounts.keys())[list(accounts.values()).index(conn)]
     except ValueError:
         return "You are currently not logged in. Please log in first in order to delete your account."
 
@@ -160,10 +158,10 @@ def delete_account(conn):
     queues.pop(account_to_be_deleted)
     return "The account {} has been successfully deleted.".format(account_to_be_deleted)
 
-def show_accounts(search_input)
+def show_accounts(search_input):
     regex = re.compile(search_input)
-    matches = [string for string in accounts.keys() if re.match(regex, string)]
-    return matches
+    matches = [string for string in list(accounts.keys()) if re.match(regex, string)]
+    return " ".join(str(x) for x in matches)
 
 
 def main():
