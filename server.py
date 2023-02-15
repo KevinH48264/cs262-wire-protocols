@@ -60,7 +60,7 @@ def socket_accept():
 def receive_commands(conn):
     # TODO: Edit this so that user can create account, and the other stuff.
     while True:
-        print("hi")
+        print("current info: ", accounts, queues)
         data = conn.recv(1024)
         input_cmd = data.decode("utf-8")
         res = "Waiting for valid response..."
