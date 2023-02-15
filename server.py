@@ -1,7 +1,5 @@
 import socket
-import sys
-import os
-import subprocess
+import _thread
 import re
 
 '''
@@ -48,16 +46,19 @@ def bind_socket():
 
 # Establish connection with a client (socket must be listening)
 def socket_accept():
-    conn, address = s.accept()
-    print("Connection has been established! |" + " IP " + address[0] + " | Port" + str(address[1]))
-    receive_commands(conn)
-    conn.close()
+    while True:
+        conn, address = s.accept()
+        print("Connection has been established! |" + " IP " + address[0] + " | Port" + str(address[1]))
+
+        # allow for multiple connections to be made
+        _thread.start_new_thread(receive_commands, (conn, address))
+    s.close()
 
 # Send commands to client/victim or a friend
 def receive_commands(conn):
     # TODO: Edit this so that user can create account, and the other stuff.
     while True:
-        print("hi")
+        print("current info: ", accounts, queues)
         data = conn.recv(1024)
         input_cmd = data.decode("utf-8")
         res = "Waiting for valid response..."
@@ -75,6 +76,9 @@ def receive_commands(conn):
             username = input_cmd[7:]
             res = log_in(username, conn)
 
+            # k - server delivers undelivered messages to a particular user if they logged in
+            check_queue(input_cmd[8:], conn)
+
         # b - allow client to list accounts by text wildcard
         if 'show_accounts' in input_cmd:
             # show_accounts + space is 13 characters
@@ -82,8 +86,10 @@ def receive_commands(conn):
             res = show_accounts(username)
 
         # k - allow client to send a message to a recipient, and queue if the recipient isn't logged in
+        # to send a message: "send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]"
+        if 'send_message_to ' in input_cmd:
+            res = send_message(input_cmd)
 
-        # k - server delivers undelivered messages to a particular user if they logged in
 
         # b - allow client to delete an account
         if 'delete_account' in input_cmd:
@@ -92,9 +98,42 @@ def receive_commands(conn):
             res = delete_account(username, conn)
 
         # k - allow clients to quit connection
+        if 'quit' in input_cmd[:4]:
+            # mark that the sender has closed their connection
+            sender = accounts.keys()[accounts.values().index(conn)]
+            accounts[sender] = None
 
         conn.send(str.encode(res))
 
+def check_queue(user, conn):
+    # send messages to user
+    for msg in queues[user]:
+        conn.send(str.encode(msg))
+
+def send_message(input_cmd, conn):
+    # ensure the formatting for sending a message is correct
+    if 'message: ' not in input_cmd:
+        res = "please send a message using this format: 'send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]'"
+    
+    recipient = input_cmd[17:input_cmd.find("message: ")]
+    message = input_cmd[input_cmd.find("message: ") + 9:]
+
+    if recipient in accounts.keys(): 
+        # recipient exists
+        recipient_conn = accounts[recipient]
+        
+        if recipient_conn:
+            # recipient is online and message can be delivered
+            recipient_conn.send(str.encode(message))
+        else:
+            # recipient is offline and message should be stored in queue
+            sender = accounts.keys()[accounts.values().index(conn)]
+            queues[recipient] = queues[recipient].append([sender + " sent you a message: " + message])
+    else:
+        # recipient does not exist
+        res = "error: the recipient " + recipient + " does not exist, please have them create an account before you can send a message to them"
+    
+    return res
 
 def log_in(username, conn):
     if accounts.has_key(username):
@@ -111,11 +150,10 @@ def create_account(username, conn)
         queues[username] = []
         return "account_created"
 
-def delete_account(conn)
+def delete_account(conn):
     try:
         account_to_be_deleted = accounts.keys()[accounts.values().index(conn)]
-
-    except: ValueError:
+    except ValueError:
         return "You are currently not logged in. Please log in first in order to delete your account."
 
     accounts.pop(account_to_be_deleted)
