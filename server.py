@@ -3,7 +3,17 @@ import sys
 import os
 import subprocess
 
+'''
+accounts = { username: conn_var }
+queues = { username: [msgs] } 
+'''
+accounts = {}
+queues = {}
 
+# implement as txt file to retrieve from in the future
+def init():
+    # read from txt files accounts and queues
+    pass
 
 # Create a Socket ( connect two computers)
 def create_socket():
