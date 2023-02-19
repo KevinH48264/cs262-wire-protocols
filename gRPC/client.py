@@ -1,70 +1,56 @@
-import socket, threading, select
-import sys
+# Import necessary packages
+import grpc
+import messaging_pb2
+import messaging_pb2_grpc
 
-# create a socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# Define the server address
+server_address = "localhost:50051"
 
-# Get the server computer's IP address
-server_ip_address = '10.250.253.162'
-port = 9977
+# Create a gRPC channel and stub
+channel = grpc.insecure_channel(server_address)
+stub = messaging_pb2_grpc.MessagingServiceStub(channel)
 
-s.connect((server_ip_address, port))
+# Define functions to call the gRPC methods
+def create_account(username):
+    account = messaging_pb2.Account(username=username)
+    response = stub.CreateAccount(account)
+    return response
 
-# Waiting for response that we are successfully connected
-print(str(s.recv(1024),"utf-8"), end="")
+def log_in(username):
+    account = messaging_pb2.Account(username=username)
+    response = stub.LogIn(account)
+    return response
 
-def receive_message(s):
-    print("receiving message")
-    while True:
-        print("waiting to receive message")
-        ready, _, _ = select.select([s], [], [], 0.1)
-        if ready:
-            client_response = str(s.recv(1024),"utf-8")
-            if not client_response:
-                break
-            print(client_response, end="")
-    print("Broke receive")
+def send_message(recipient, text):
+    message = messaging_pb2.Message(recipient=recipient, text=text)
+    response = stub.SendMessage(message)
+    return response
 
-def send_message(s):
-    print("sending message")
-    while True:
-        print("waiting for input")
-        ready, _, _ = select.select([sys.stdin.fileno()], [], [], 0.1)
-        if ready:
-            cmd = input()
-            
-            if len(str.encode(cmd)) > 0:
-                s.send(str.encode(cmd))
-                client_response = str(s.recv(1024),"utf-8")
-                print(client_response, end="")
+def list_accounts(pattern):
+    request = messaging_pb2.ListAccountsRequest(pattern=pattern)
+    response = stub.ListAccounts(request)
+    return response.accounts
 
-            if cmd == "quit":
-                s.send(str.encode(cmd))
-                break
-    print("broke send")
+def delete_account():
+    response = stub.DeleteAccount(messaging_pb2.Empty())
+    return response
 
+# Example usage
+username = "example_username"
+create_account_response = create_account(username)
+print(f"Create account response: {create_account_response}")
 
+log_in_response = log_in(username)
+print(f"Log in response: {log_in_response}")
 
-# Create two threads for sending and receiving messages
-receive_thread = threading.Thread(target=receive_message, args=(s,))
-send_thread = threading.Thread(target=send_message, args=(s,))
+recipient = "example_recipient"
+text = "example_text"
+send_message_response = send_message(recipient, text)
+print(f"Send message response: {send_message_response}")
 
-# Start both threads
-receive_thread.start()
-send_thread.start()
+pattern = "example_pattern"
+list_accounts_response = list_accounts(pattern)
+print(f"List accounts response: {list_accounts_response}")
 
-# Wait for both threads to finish
-# receive_thread.join()
-# send_thread.join()
-
-# while True:
-#     cmd = input()
-    
-#     if len(str.encode(cmd)) > 0:
-#         s.send(str.encode(cmd))
-#         client_response = str(s.recv(1024),"utf-8")
-#         print(client_response, end="")
-
-#     if cmd == "quit":
-#         s.send(str.encode(cmd))
-#         break
+delete_account_response = delete_account()
+print(f"Delete account response: {delete_account_response}")
