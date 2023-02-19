@@ -164,7 +164,11 @@ def show_accounts(search_input):
     matches = [account for account in list(accounts.keys()) if re.match(regex, account)]
     print(matches)
     #return " ".join(str(x) for x in matches)
-    return matches
+    print(" ".join(str(x) for x in matches))
+    final_accounts = ""
+    for i in range(matches):
+        final_accounts += matches[i]
+    return final_accounts
 
 def main():
     create_socket()
