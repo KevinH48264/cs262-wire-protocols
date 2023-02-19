@@ -56,7 +56,7 @@ def socket_accept():
 
 # Send commands to client/victim or a friend
 def receive_commands(conn):
-    conn.send(str.encode("YOU ARE SUCCESSFULLY CONNECTED TO THE SERVER! Instructions here: 1. create_account [USERNAME] 2. show_accounts [USERNAME] 3. send_message [USERNAME] message [MESSAGE] 5. delete_account [username] 6 (extra): log_in [USERNAME] \n"))
+    conn.send(str.encode("YOU ARE SUCCESSFULLY CONNECTED TO THE SERVER! Instructions here: 1. create_account [USERNAME] 2. show_accounts [USERNAME (optional)] 3. send_message [USERNAME] message [MESSAGE] 5. delete_account [username] 6 (extra): log_in [USERNAME] \n"))
     # TODO: Edit this so that user can create account, and the other stuff.
     while True:
         print("current info: ", accounts, queues)
@@ -142,7 +142,6 @@ def log_in(username, conn):
 
 def create_account(username, conn):
     if username in list(accounts.keys()):
-        print("User name already exists")
         return "This username already exists. If this is your account, please log in. If not, create an account with a different username."
     else:
         accounts[username] = conn
@@ -162,6 +161,7 @@ def delete_account(conn):
 def show_accounts(search_input):
     regex = re.compile(search_input)
     matches = [string for string in list(accounts.keys()) if re.match(regex, string)]
+    print(matches)
     return " ".join(str(x) for x in matches)
 
 
