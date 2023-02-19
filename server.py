@@ -160,10 +160,11 @@ def delete_account(conn):
 
 def show_accounts(search_input):
     regex = re.compile(search_input)
-    matches = [string for string in list(accounts.keys()) if re.match(regex, string)]
+    print(list(accounts.keys()))
+    matches = [account for account in list(accounts.keys()) if re.match(regex, account)]
     print(matches)
-    return " ".join(str(x) for x in matches)
-
+    #return " ".join(str(x) for x in matches)
+    return matches
 
 def main():
     create_socket()
