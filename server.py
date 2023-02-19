@@ -21,7 +21,7 @@ def create_socket():
         global port
         global s
         host = "10.250.253.162"
-        port = 9998
+        port = 9997
         s = socket.socket()
 
     except socket.error as msg:
@@ -161,12 +161,16 @@ def delete_account(conn):
 def show_accounts(search_input):
     regex = re.compile(search_input)
     print(list(accounts.keys()))
-    matches = [account for account in list(accounts.keys()) if re.match(regex, account)]
+    matches = []
+    for account in list(accounts.keys()):
+        if re.match(regex, account) is not None:
+            matches.append(account)
+
     print(matches)
     #return " ".join(str(x) for x in matches)
     print(" ".join(str(x) for x in matches))
     final_accounts = ""
-    for i in range(matches):
+    for i in range(len(matches)):
         final_accounts += matches[i]
     return final_accounts
 
