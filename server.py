@@ -1,6 +1,7 @@
 import socket
 import _thread
 import re
+import fnmatch
 
 '''
 accounts = { username: conn_var }
@@ -21,7 +22,7 @@ def create_socket():
         global port
         global s
         host = "10.250.253.162"
-        port = 9997
+        port = 9978
         s = socket.socket()
 
     except socket.error as msg:
@@ -56,8 +57,9 @@ def socket_accept():
 
 # Send commands to client/victim or a friend
 def receive_commands(conn):
-    conn.send(str.encode("YOU ARE SUCCESSFULLY CONNECTED TO THE SERVER! Instructions here: 1. create_account [USERNAME] 2. show_accounts [USERNAME (optional)] 3. send_message [USERNAME] message [MESSAGE] 5. delete_account [username] 6 (extra): log_in [USERNAME] \n"))
+    conn.send(str.encode("YOU ARE SUCCESSFULLY CONNECTED TO THE SERVER! Instructions here: 1. create_account [USERNAME] 2. show_accounts [USERNAME (optional)] 3. send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE] 5. delete_account [username] 6 (extra): log_in [USERNAME] \n"))
     # TODO: Edit this so that user can create account, and the other stuff.
+
     while True:
         print("current info: ", accounts, queues)
         data = conn.recv(1024)
@@ -82,13 +84,15 @@ def receive_commands(conn):
 
         # b - allow client to list accounts by text wildcard
         if 'show_accounts' in input_cmd:
-            # show_accounts + space is 13 characters
-            username = input_cmd[13:]
+            # show_accounts + space is 14 characters
+            username = input_cmd[14:]
             res = show_accounts(username)
 
         # k - allow client to send a message to a recipient, and queue if the recipient isn't logged in
         # to send a message: "send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]"
-        if 'send_message_to ' in input_cmd:
+        print(input_cmd)
+        if 'send_message_to' in input_cmd:
+            print("sending")
             res = send_message(input_cmd, conn)
 
         # b - allow client to delete an account
@@ -109,12 +113,17 @@ def check_queue(user, conn):
         conn.send(str.encode(msg))
 
 def send_message(input_cmd, conn):
+    print("input_cmd")
+    print(input_cmd)
     # ensure the formatting for sending a message is correct
     if 'message: ' not in input_cmd:
         res = "please send a message using this format: 'send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]'"
     
-    recipient = input_cmd[17:input_cmd.find("message: ")]
+    recipient = input_cmd[16:input_cmd.find("message: ") - 1]
     message = input_cmd[input_cmd.find("message: ") + 9:]
+
+    print(recipient)
+    print(message)
 
     if recipient in list(accounts.keys()): 
         # recipient exists
@@ -123,10 +132,16 @@ def send_message(input_cmd, conn):
         if recipient_conn:
             # recipient is online and message can be delivered
             recipient_conn.send(str.encode(message))
+            res = "message successfully sent to {}".format(recipient)
+
         else:
             # recipient is offline and message should be stored in queue
+            print("queue before:", queues)
             sender = list(accounts.keys())[list(accounts.values()).index(conn)]
-            queues[recipient] = queues[recipient].append([sender + " sent you a message: " + message])
+            queues[recipient].append([sender + " sent you a message: " + message])
+            print("queue after:", queues)
+            res = "message will be sent to {} when they log in".format(recipient)
+
     else:
         # recipient does not exist
         res = "error: the recipient " + recipient + " does not exist, please have them create an account before you can send a message to them"
@@ -160,18 +175,15 @@ def delete_account(conn):
 
 def show_accounts(search_input):
     regex = re.compile(search_input)
-    print(list(accounts.keys()))
     matches = []
-    for account in list(accounts.keys()):
-        if re.match(regex, account) is not None:
-            matches.append(account)
+    matches = [string for string in list(accounts.keys()) if re.match(regex, string) is not None]
 
-    print(matches)
-    #return " ".join(str(x) for x in matches)
-    print(" ".join(str(x) for x in matches))
+    for i in range(len(matches)):
+        print(matches[i] + " ")
+
     final_accounts = ""
     for i in range(len(matches)):
-        final_accounts += matches[i]
+        final_accounts += matches[i] + " "
     return final_accounts
 
 def main():
