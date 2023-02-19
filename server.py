@@ -1,7 +1,6 @@
 import socket
 import _thread
 import re
-import fnmatch
 
 '''
 accounts = { username: conn_var }
@@ -21,8 +20,8 @@ def create_socket():
         global host
         global port
         global s
-        host = "10.250.253.162"
-        port = 9978
+        host = "10.250.109.126"
+        port = 9973
         s = socket.socket()
 
     except socket.error as msg:
@@ -70,17 +69,17 @@ def receive_commands(conn):
         # Input format should be: create_account [USERNAME]
         if 'create_account' in input_cmd:
             # create_account + space is 15 characters
-            username = input_cmd[15:]
+            username = input_cmd[15:].strip("\n")
             res = create_account(username, conn)
 
         # b - allow clients to log in
         if 'log_in' in input_cmd:
             # log_in + space is 7 characters
-            username = input_cmd[7:]
+            username = input_cmd[7:].strip("\n")
             res = log_in(username, conn)
 
             # k - server delivers undelivered messages to a particular user if they logged in
-            check_queue(input_cmd[8:], conn)
+            check_queue(username, conn)
 
         # b - allow client to list accounts by text wildcard
         if 'show_accounts' in input_cmd:
@@ -104,13 +103,16 @@ def receive_commands(conn):
             # mark that the sender has closed their connection
             sender = list(accounts.keys())[list(accounts.values()).index(conn)]
             accounts[sender] = None
+            res = "successfully quit / logged off"
 
         conn.send(str.encode(res + "\n"))
 
 def check_queue(user, conn):
     # send messages to user
+    print(queues[user])
     for msg in queues[user]:
         conn.send(str.encode(msg))
+        queues[user].remove(msg)
 
 def send_message(input_cmd, conn):
     print("input_cmd")
@@ -138,7 +140,7 @@ def send_message(input_cmd, conn):
             # recipient is offline and message should be stored in queue
             print("queue before:", queues)
             sender = list(accounts.keys())[list(accounts.values()).index(conn)]
-            queues[recipient].append([sender + " sent you a message: " + message])
+            queues[recipient].append(sender + " sent you a message: " + message)
             print("queue after:", queues)
             res = "message will be sent to {} when they log in".format(recipient)
 
