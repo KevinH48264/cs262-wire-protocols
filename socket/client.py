@@ -1,4 +1,4 @@
-import socket, threading, select
+import socket, select
 import sys
 
 # create a socket
