@@ -124,8 +124,8 @@ RECIPIENT receives: “[SENDER] sent you a message: [MESSAGE]“
 #### 2. Identify the ip address and port number of the computer that will run the server. In `server.py` on lines 9 and 10, set
 
 ``` 
-	ip = "INSERT YOUR SERVER IP ADDRESS HERE" (e.g. "10.250.109.126")
-	port = INSERT YOUR PORT NUMBER HERE (e.g. 9998)
+ip = "INSERT YOUR SERVER IP ADDRESS HERE" (e.g. "10.250.109.126")
+port = INSERT YOUR PORT NUMBER HERE (e.g. 9998)
 ``` 
 
 In `client.py`, set `server_ip_address` and `port` as the same ip address and port number as in `server.py`, respectively. 
