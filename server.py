@@ -2,17 +2,8 @@ import socket
 import _thread
 import re
 
-'''
-accounts = { username: conn_var }
-queues = { username: [msgs] } 
-'''
 accounts = {}
 queues = {}
-
-# implement as txt file to retrieve from in the future
-def init():
-    # read from txt files accounts and queues
-    pass
 
 # Create a Socket ( connect two computers)
 def create_socket():
@@ -26,7 +17,6 @@ def create_socket():
 
     except socket.error as msg:
         print("Socket creation error: " + str(msg))
-
 
 # Binding the socket and listening for connections
 def bind_socket():
@@ -42,7 +32,6 @@ def bind_socket():
     except socket.error as msg:
         print("Socket Binding error" + str(msg) + "\n" + "Retrying...")
         bind_socket()
-
 
 # Establish connection with a client (socket must be listening)
 def socket_accept():

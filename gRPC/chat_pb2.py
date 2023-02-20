@@ -13,23 +13,17 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nchat.proto\x12\tmessaging\"\x1b\n\x07\x41\x63\x63ount\x12\x10\n\x08username\x18\x01 \x01(\t\"*\n\x07Message\x12\x11\n\trecipient\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t\"&\n\x13ListAccountsRequest\x12\x0f\n\x07pattern\x18\x01 \x01(\t\"<\n\x14ListAccountsResponse\x12$\n\x08\x61\x63\x63ounts\x18\x01 \x03(\x0b\x32\x12.messaging.Account\"\x07\n\x05\x45mpty2\xbd\x02\n\x10MessagingService\x12\x37\n\rCreateAccount\x12\x12.messaging.Account\x1a\x10.messaging.Empty\"\x00\x12/\n\x05LogIn\x12\x12.messaging.Account\x1a\x10.messaging.Empty\"\x00\x12\x35\n\x0bSendMessage\x12\x12.messaging.Message\x1a\x10.messaging.Empty\"\x00\x12Q\n\x0cListAccounts\x12\x1e.messaging.ListAccountsRequest\x1a\x1f.messaging.ListAccountsResponse\"\x00\x12\x35\n\rDeleteAccount\x12\x10.messaging.Empty\x1a\x10.messaging.Empty\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nchat.proto\"\x1a\n\x07Request\x12\x0f\n\x07request\x18\x01 \x01(\t\"\x1c\n\x08Response\x12\x10\n\x08response\x18\x01 \x01(\t2\xca\x01\n\x0b\x43hatService\x12&\n\rCreateAccount\x12\x08.Request\x1a\t.Response\"\x00\x12\x1e\n\x05LogIn\x12\x08.Request\x1a\t.Response\"\x00\x12$\n\x0bSendMessage\x12\x08.Request\x1a\t.Response\"\x00\x12%\n\x0cListAccounts\x12\x08.Request\x1a\t.Response\"\x00\x12&\n\rDeleteAccount\x12\x08.Request\x1a\t.Response\"\x00\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'chat_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _ACCOUNT._serialized_start=25
-  _ACCOUNT._serialized_end=52
-  _MESSAGE._serialized_start=54
-  _MESSAGE._serialized_end=96
-  _LISTACCOUNTSREQUEST._serialized_start=98
-  _LISTACCOUNTSREQUEST._serialized_end=136
-  _LISTACCOUNTSRESPONSE._serialized_start=138
-  _LISTACCOUNTSRESPONSE._serialized_end=198
-  _EMPTY._serialized_start=200
-  _EMPTY._serialized_end=207
-  _MESSAGINGSERVICE._serialized_start=210
-  _MESSAGINGSERVICE._serialized_end=527
+  _REQUEST._serialized_start=14
+  _REQUEST._serialized_end=40
+  _RESPONSE._serialized_start=42
+  _RESPONSE._serialized_end=70
+  _CHATSERVICE._serialized_start=73
+  _CHATSERVICE._serialized_end=275
 # @@protoc_insertion_point(module_scope)

@@ -1,30 +1,17 @@
 syntax = "proto3";
 
-package messaging;
-
-service MessagingService {
-    rpc CreateAccount(Account) returns (Empty) {}
-    rpc LogIn(Account) returns (Empty) {}
-    rpc SendMessage(Message) returns (Empty) {}
-    rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse) {}
-    rpc DeleteAccount(Empty) returns (Empty) {}
+service ChatService {
+    rpc CreateAccount(Request) returns (Response) {}
+    rpc LogIn(Request) returns (Response) {}
+    rpc SendMessage(Request) returns (Response) {}
+    rpc ListAccounts(Request) returns (Response) {}
+    rpc DeleteAccount(Request) returns (Response) {}
 }
 
-message Account {
-    string username = 1;
+message Request {
+    string request = 1;
 }
 
-message Message {
-    string recipient = 1;
-    string text = 2;
+message Response {
+    string response = 1;
 }
-
-message ListAccountsRequest {
-    string pattern = 1;
-}
-
-message ListAccountsResponse {
-    repeated Account accounts = 1;
-}
-
-message Empty {}
