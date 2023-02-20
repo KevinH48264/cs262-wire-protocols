@@ -4,9 +4,9 @@ Design notebook: https://docs.google.com/document/d/1O02g64RKuSJvuYscbTvHQCIFWnb
 
 ## Part 1:
 
-1. Navigate to `cs262-wire-protocols/socket`.
+**1.** Navigate to `cs262-wire-protocols/socket`.
 
-2. Identify the ip address and port number of the computer that will run the server. In `server.py` on lines 23 and 24, set
+**2.** Identify the ip address and port number of the computer that will run the server. In `server.py` on lines 23 and 24, set
 
 	``` 
 	host = "INSERT YOUR SERVER IP ADDRESS HERE" (e.g. "10.250.109.126")
@@ -16,20 +16,20 @@ Design notebook: https://docs.google.com/document/d/1O02g64RKuSJvuYscbTvHQCIFWnb
 In`client.py`, set `server_ip_address` and `port` as the same ip address and port number as in `server.py`, respectively. 
 
 
-3. Start the server by running the following command in the terminal:
+**3.** Start the server by running the following command in the terminal:
 
 	``` python server.py ```
 
-4. Start the client by running the following command in the terminal:
+**4.** Start the client by running the following command in the terminal:
 
 	``` python client.py ```
 
 
 # Part 2:
 
-1. Navigate to `cs262-wire-protocols/grpc`.
+**1.** Navigate to `cs262-wire-protocols/grpc`.
 
-2. Identify the ip address and port number of the computer that will run the server. In `server.py` on lines 9 and 10, set
+**2.** Identify the ip address and port number of the computer that will run the server. In `server.py` on lines 9 and 10, set
 
 	``` 
 	ip = "INSERT YOUR SERVER IP ADDRESS HERE" (e.g. "10.250.109.126")
@@ -39,10 +39,10 @@ In`client.py`, set `server_ip_address` and `port` as the same ip address and por
 In`client.py`, set `server_ip_address` and `port` as the same ip address and port number as in `server.py`, respectively. 
 
 
-3. Start the server by running the following command in the terminal:
+**3.** Start the server by running the following command in the terminal:
 
 	``` python server.py ```
 
-4. Start the client by running the following command in the terminal:
+**4.** Start the client by running the following command in the terminal:
 
 	``` python client.py ```
