@@ -5,7 +5,7 @@ import chat_pb2_grpc
 import sys
 
 # Get the server computer's IP address
-server_ip_address = '10.250.253.162'
+server_ip_address = '10.250.109.126'
 port = 9999
 
 def create_account(stub, cmd):
@@ -34,16 +34,13 @@ def run():
 
         while True:
             message = stub.ReceiveMessage(chat_pb2.Request(request="temp"))
-            if (message):
+            if (message and message.response):
                 print(message.response)
             
-            # ready, _, _ = select.select([sys.stdin.fileno()], [], [], 0.1)
-            ready = True
+            ready, _, _ = select.select([sys.stdin.fileno()], [], [], 0.1)
             if ready:
-                if True:
-                # if sys.stdin.fileno() in ready:
-                    # cmd = sys.stdin.readline()
-                    cmd = input()
+                if sys.stdin.fileno() in ready:
+                    cmd = sys.stdin.readline()
                     res = "Waiting for a valid response... Please see instructions above."
                     if len(str.encode(cmd)) > 0:
                         if 'create_account' in cmd:

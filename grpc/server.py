@@ -5,12 +5,9 @@ from concurrent import futures
 import chat_pb2
 import chat_pb2_grpc
 
-'''
-accounts = { username: conn_var }
-queues = { username: [msgs] } 
-'''
-accounts = {}
-queues = {}
+
+ip = "10.250.253.162"
+port = "9999"
 
 def check_queue(user, conn):
     # send messages to user
@@ -117,7 +114,7 @@ class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
 if __name__ == '__main__':
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)
-    server.add_insecure_port('10.250.253.162:9999')
+    server.add_insecure_port(ip + ":" + port)
     server.start()
     print('Server is running...')
     server.wait_for_termination()
