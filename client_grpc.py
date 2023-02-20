@@ -5,8 +5,9 @@ import sys
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Get the server computer's IP address
+# brandon's server_ip_address = '10.250.253.162'
 server_ip_address = '10.250.109.126'
-port = 9972
+port = 9973
 
 s.connect((server_ip_address, port))
 
@@ -14,7 +15,7 @@ s.connect((server_ip_address, port))
 print(str(s.recv(1024),"utf-8"), end="")
 
 def receive_message(s):
-    #print("receiving message")
+    print("receiving message")
     while True:
         #print("waiting to receive message")
         ready, _, _ = select.select([s], [], [], 0.1)
@@ -26,13 +27,13 @@ def receive_message(s):
     print("Broke receive")
 
 def send_message(s):
-    #print("sending message")
+    print("sending message")
     while True:
         #print("waiting for input")
         ready, _, _ = select.select([sys.stdin], [], [], 0.1)
         if ready:
+            #cmd = input()
             cmd = sys.stdin.readline()
-            
             if len(str.encode(cmd)) > 0:
                 s.send(str.encode(cmd))
                 client_response = str(s.recv(1024),"utf-8")
@@ -42,21 +43,18 @@ def send_message(s):
                 s.send(str.encode(cmd))
                 break
     print("broke send")
-s
+
 while True:
-    #print("waiting to receive message")
-    ready, _, _ = select.select([s.fileno(), sys.stdin.fileno()], [], [], 0.1)
-    if ready:
-        if s.fileno() in ready:
-            print("hi")
+    sockets_list = [sys.stdin, s]
+    read_sockets, write_socket, error_socket = select.select(sockets_list, [], [])
+    for socks in read_sockets:
+        if socks == s:
             client_response = str(s.recv(1024),"utf-8")
             if not client_response:
                 break
             print(client_response, end="")
-        elif sys.stdin.fileno() in ready:
-            print("sys")
+        else:
             cmd = sys.stdin.readline()
-            
             if len(str.encode(cmd)) > 0:
                 s.send(str.encode(cmd))
                 client_response = str(s.recv(1024),"utf-8")
@@ -65,16 +63,16 @@ while True:
             if cmd == "quit":
                 s.send(str.encode(cmd))
                 break
+s.close()
 
 
+# Create two threads for sending and receiving messages
+#receive_thread = threading.Thread(target=receive_message, args=(s,))
+#send_thread = threading.Thread(target=send_message, args=(s,))
 
-# # Create two threads for sending and receiving messages
-# receive_thread = threading.Thread(target=receive_message, args=(s,))
-# send_thread = threading.Thread(target=send_message, args=(s,))
-
-# # Start both threads
-# receive_thread.start()
-# send_thread.start()
+# Start both threads
+#receive_thread.start()
+#send_thread.start()
 
 # Wait for both threads to finish
 # receive_thread.join()
