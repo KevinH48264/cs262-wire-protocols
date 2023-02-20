@@ -4,7 +4,7 @@ import chat_pb2
 import chat_pb2_grpc
 import sys
 
-# Get the server computer's IP address
+# insert the server computer's IP address and port here
 server_ip_address = '10.250.109.126'
 port = 9999
 
@@ -27,6 +27,7 @@ def quit(stub, cmd):
     return stub.LogOut(chat_pb2.Request(request=cmd))
 
 def run():
+    # connect to server host and port
     with grpc.insecure_channel(('{}:{}').format(server_ip_address, port)) as channel:
         stub = chat_pb2_grpc.ChatServiceStub(channel)
 
@@ -36,12 +37,17 @@ def run():
             message = stub.ReceiveMessage(chat_pb2.Request(request="temp"))
             if (message and message.response):
                 print(message.response)
-            
+
+            # listen to the socket or stdin for keyboard inputs.
             ready, _, _ = select.select([sys.stdin.fileno()], [], [], 0.1)
+
+            # once ready, check if the response is from a keyboard input (stdin) or server (socket connection)
             if ready:
                 if sys.stdin.fileno() in ready:
+                    # read the keyboard input
                     cmd = sys.stdin.readline()
                     res = "Waiting for a valid response... Please see instructions above."
+                    # if there is a command prompt, send it and wait for a server response before printing it and continuing
                     if len(str.encode(cmd)) > 0:
                         if 'create_account' in cmd:
                             res = create_account(stub, cmd).response
