@@ -1,91 +1,60 @@
 import socket, threading, select
+import grpc
+import chat_pb2
+import chat_pb2_grpc
 import sys
 
-# create a socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
 # Get the server computer's IP address
-# brandon's server_ip_address = '10.250.253.162'
 server_ip_address = '10.250.109.126'
-port = 9973
+port = 9999
 
-s.connect((server_ip_address, port))
+def create_account(stub, cmd):
+    return stub.CreateAccount(chat_pb2.Request(request=cmd))
 
-# Waiting for response that we are successfully connected
-print(str(s.recv(1024),"utf-8"), end="")
+def login(stub, cmd):
+    return stub.LogIn(chat_pb2.Request(request=cmd))
 
-def receive_message(s):
-    print("receiving message")
-    while True:
-        #print("waiting to receive message")
-        ready, _, _ = select.select([s], [], [], 0.1)
-        if ready:
-            client_response = str(s.recv(1024),"utf-8")
-            if not client_response:
-                break
-            print(client_response, end="")
-    print("Broke receive")
+def show_accounts(stub, cmd):
+    return stub.ListAccounts(chat_pb2.Request(request=cmd))
 
-def send_message(s):
-    print("sending message")
-    while True:
-        #print("waiting for input")
-        ready, _, _ = select.select([sys.stdin], [], [], 0.1)
-        if ready:
-            #cmd = input()
-            cmd = sys.stdin.readline()
-            if len(str.encode(cmd)) > 0:
-                s.send(str.encode(cmd))
-                client_response = str(s.recv(1024),"utf-8")
-                print(client_response, end="")
+def send_message_to(stub, cmd):
+    return stub.SendMessage(chat_pb2.Request(request=cmd))
 
-            if cmd == "quit":
-                s.send(str.encode(cmd))
-                break
-    print("broke send")
+def delete_account(stub, cmd):
+    return stub.DeleteAccount(chat_pb2.Request(request=cmd))
 
-while True:
-    sockets_list = [sys.stdin, s]
-    read_sockets, write_socket, error_socket = select.select(sockets_list, [], [])
-    for socks in read_sockets:
-        if socks == s:
-            client_response = str(s.recv(1024),"utf-8")
-            if not client_response:
-                break
-            print(client_response, end="")
-        else:
-            cmd = sys.stdin.readline()
-            if len(str.encode(cmd)) > 0:
-                s.send(str.encode(cmd))
-                client_response = str(s.recv(1024),"utf-8")
-                print(client_response, end="")
+def quit(stub, cmd):
+    return stub.LogOut(chat_pb2.Request(request=cmd))
 
-            if cmd == "quit":
-                s.send(str.encode(cmd))
-                break
-s.close()
+def run():
+    with grpc.insecure_channel('{}:{}').format(server_ip_address, port) as channel:
+        stub = chat_pb2_grpc.ChatStub(channel)
+        while True:
+            # message = stub.ReceiveMessage()
+            # if (message):
+            #     client_response = str(message.text,"utf-8")
+            #     if not client_response:
+            #         break
+            #     print(client_response, end="")
+        
+            ready, _, _ = select.select([sys.stdin.fileno()], [], [], 0.1)
+            if ready:
+                if sys.stdin.fileno() in ready:
+                    cmd = sys.stdin.readline()
+                    if len(str.encode(cmd)) > 0:
+                        if 'create_account' in cmd:
+                            create_account(stub, cmd)
+                        if 'log_in' in cmd:
+                            login(stub, cmd)
+                        if 'show_accounts' in cmd:
+                            show_accounts(stub, cmd)
+                        if 'send_message_to' in cmd:
+                            send_message_to(stub, cmd)
+                        if 'delete_account' in cmd:
+                            delete_account(stub, cmd)
+                        if 'quit' in cmd:
+                            quit(stub, cmd)
+                            break
 
-
-# Create two threads for sending and receiving messages
-#receive_thread = threading.Thread(target=receive_message, args=(s,))
-#send_thread = threading.Thread(target=send_message, args=(s,))
-
-# Start both threads
-#receive_thread.start()
-#send_thread.start()
-
-# Wait for both threads to finish
-# receive_thread.join()
-# send_thread.join()
-
-# while True:
-#     cmd = input()
-    
-#     if len(str.encode(cmd)) > 0:
-#         s.send(str.encode(cmd))
-#         client_response = str(s.recv(1024),"utf-8")
-#         print(client_response, end="")
-
-#     if cmd == "quit":
-#         s.send(str.encode(cmd))
-#         break
+if __name__ == '__main__':
+    run()
