@@ -2,8 +2,8 @@ import socket, select
 import sys
 
 # insert the server computer's IP address and port here
-host = '10.250.109.126'
-port = 9999
+host = '10.250.253.162'
+port = 9960
 
 # create a socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -5,7 +5,7 @@ import chat_pb2_grpc
 import sys
 
 # insert the server computer's IP address and port here
-server_ip_address = '10.250.109.126'
+server_ip_address = '10.250.253.162'
 port = 9999
 
 def create_account(stub, cmd):

@@ -3,8 +3,8 @@ import _thread
 import re
 
 # insert the server computer's IP address and port here
-host = "10.250.109.126"
-port = 9999
+host = "10.250.253.162"
+port = 9956
 
 # this is the object that stores { username : connection (if logged in) } as a key : value dictionary that runs when the server starts, keeping track of all usernames and their connections if they are connected
 accounts = {}
@@ -183,7 +183,16 @@ def show_accounts(search_input):
     return final_accounts
 
 # create the socket, bind to the socket, and accept connections as a server
-def main():
+def main(custom_host_port=None):
+    global host
+    global port
+    
+    print("TESTING", host, port, custom_host_port)
+
+    # allow for custom host and ports to be defined
+    if custom_host_port:
+        host, port = custom_host_port.split(":")
+
     create_socket()
     bind_socket()
     socket_accept()
