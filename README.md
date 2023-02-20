@@ -4,7 +4,7 @@ Design notebook: https://docs.google.com/document/d/1O02g64RKuSJvuYscbTvHQCIFWnb
 
 ## Part 1:
 
-1. Navigate to `cs262-wire-protocols/socket`.
+### 1. Navigate to `cs262-wire-protocols/socket`.
 
 2. Identify the ip address and port number of the computer that will run the server. In `server.py` on lines 23 and 24, set
 
@@ -30,11 +30,11 @@ After following setup instructions above with both a client and server running i
 
 1. Create an account. You must supply a unique username.
 
-Run this command: 
+**Run this command:**
 
 `create_account [USERNAME]`
 
-Expected result: 
+**Expected result:**
 
 If username is unique: “Account [USERNAME] created!”
 If username is not unique: “This username already exists. If this is your account, please log in. If not, create an account with a different username.”
