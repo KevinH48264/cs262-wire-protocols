@@ -21,7 +21,7 @@ def create_socket():
         global port
         global s
         host = "10.250.109.126"
-        port = 9973
+        port = 9972
         s = socket.socket()
 
     except socket.error as msg:
@@ -56,7 +56,7 @@ def socket_accept():
 
 # Send commands to client/victim or a friend
 def receive_commands(conn):
-    conn.send(str.encode("YOU ARE SUCCESSFULLY CONNECTED TO THE SERVER! Instructions here: 1. create_account [USERNAME] 2. show_accounts [USERNAME (optional)] 3. send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE] 5. delete_account [username] 6 (extra): log_in [USERNAME] \n"))
+    conn.send(str.encode("YOU ARE SUCCESSFULLY CONNECTED TO THE SERVER! Instructions here: 1. create_account [USERNAME] 2. show_accounts [USERNAME (optional)] 3. send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE] 5. delete_account [username] 6 (extra, logs you in): log_in [USERNAME] 7. (extra, logs you out): quit\n"))
     # TODO: Edit this so that user can create account, and the other stuff.
 
     while True:
