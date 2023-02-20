@@ -57,7 +57,7 @@ Note: Wildcard is defined here as the regex matching pattern. Example: “k*” 
 
 <ins>Run this command:</ins> 
 
-`send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]`
+[in SENDER terminal] `send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]`
 
 <ins>Expected result:</ins>
 
