@@ -42,7 +42,9 @@ If username is not unique: “This username already exists. If this is your acco
 
 #### 2. List accounts (or a subset of the accounts, by text wildcard).
 
-<ins>Run this command:</ins> `show_accounts [USERNAME AND WILDCARD (optional)]`
+<ins>Run this command:</ins> 
+
+`show_accounts [USERNAME AND WILDCARD (optional)]`
 
 <ins>Expected result:</ins>
 
@@ -53,7 +55,9 @@ Note: Wildcard is defined here as the regex matching pattern. Example: “k*” 
 
 #### 3. Send a message to a recipient. If the recipient is logged in, deliver immediately; otherwise queue the message and deliver on demand. If the message is sent to someone who isn't a user, return an error message.
 
-<ins>Run this command:</ins> `send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]`
+<ins>Run this command:</ins> 
+
+`send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]`
 
 <ins>Expected result:</ins>
 
@@ -76,19 +80,25 @@ SENDER receives: “error: the recipient [RECIPIENT] does not exist, please have
 
 Assuming you have SENDER and RECIPIENT clients, run the following command: 
 
-<ins>Run this command:</ins> [in RECIPIENT terminal] `quit`
+<ins>Run this command:</ins> 
+
+[in RECIPIENT terminal] `quit`
 
 <ins>Expected result:</ins>
 
 “successfully quit / logged off”
 
-<ins>Run this command:</ins> [in SENDER terminal] `send_message_to [RECIPIENT] message: [INSERT MESSAGE]`
+<ins>Run this command:</ins> 
+
+[in SENDER terminal] `send_message_to [RECIPIENT] message: [INSERT MESSAGE]`
 
 <ins>Expected result:</ins>
 
 SENDER receives: "message will be sent to [RECIPIENT] when they log in"
 
-<ins>Run this command:</ins> [in RECIPIENT terminal] `log_in [RECIPIENT]`
+<ins>Run this command:</ins> 
+
+[in RECIPIENT terminal] `log_in [RECIPIENT]`
 
 <ins>Expected result:</ins>
 
@@ -98,7 +108,9 @@ RECIPIENT receives: “[SENDER] sent you a message: [MESSAGE]“
 
 #### 5. Delete an account. You will need to specify the semantics of what happens if you attempt to delete an account that contains an undelivered message.
 
-<ins>Run this command:</ins> `delete_account [username]`
+<ins>Run this command:</ins> 
+
+`delete_account [username]`
 
 <ins>Expected result:</ins> 
 
