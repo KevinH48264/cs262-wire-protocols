@@ -30,7 +30,7 @@ After following setup instructions above with both a client and server running i
 
 #### 1. Create an account. You must supply a unique username.
 
-**Run this command:**
+<ins>Run this command:</ins>
 
 `create_account [USERNAME]`
 
