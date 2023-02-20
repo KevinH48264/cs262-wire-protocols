@@ -30,6 +30,8 @@ def run():
     with grpc.insecure_channel(('{}:{}').format(server_ip_address, port)) as channel:
         stub = chat_pb2_grpc.ChatServiceStub(channel)
 
+        print("YOU ARE SUCCESSFULLY CONNECTED TO THE SERVER! Instructions here: 1. create_account [USERNAME] 2. show_accounts [USERNAME (optional)] 3. send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE] 5. delete_account [username] 6 (extra, logs you in): log_in [USERNAME] 7. (extra, logs you out): quit\n")
+
         while True:
             message = stub.ReceiveMessage(chat_pb2.Request(request="temp"))
             if (message):
@@ -42,7 +44,7 @@ def run():
                 # if sys.stdin.fileno() in ready:
                     # cmd = sys.stdin.readline()
                     cmd = input()
-                    res = "no response received"
+                    res = "Waiting for a valid response... Please see instructions above."
                     if len(str.encode(cmd)) > 0:
                         if 'create_account' in cmd:
                             res = create_account(stub, cmd).response
@@ -56,7 +58,6 @@ def run():
                             res = delete_account(stub, cmd).response
                         if 'quit' in cmd:
                             res = quit(stub, cmd).response
-                            break
                     print(res)
 
 if __name__ == '__main__':
