@@ -34,7 +34,7 @@ After following setup instructions above with both a client and server running i
 
 `create_account [USERNAME]`
 
-**Expected result:**
+<ins>Expected result:</ins>
 
 If username is unique: “Account [USERNAME] created!”
 If username is not unique: “This username already exists. If this is your account, please log in. If not, create an account with a different username.”
@@ -42,9 +42,9 @@ If username is not unique: “This username already exists. If this is your acco
 
 #### 2. List accounts (or a subset of the accounts, by text wildcard).
 
-**Run this command:** `show_accounts [USERNAME AND WILDCARD (optional)]`
+<ins>Run this command:</ins> `show_accounts [USERNAME AND WILDCARD (optional)]`
 
-**Expected result:**
+<ins>Expected result:</ins>
 
 “[username 1] [username 2] …”
 
@@ -53,9 +53,9 @@ Note: Wildcard is defined here as the regex matching pattern. Example: “k*” 
 
 #### 3. Send a message to a recipient. If the recipient is logged in, deliver immediately; otherwise queue the message and deliver on demand. If the message is sent to someone who isn't a user, return an error message.
 
-**Run this command:** `send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]`
+<ins>Run this command:</ins> `send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]`
 
-**Expected result:**
+<ins>Expected result:</ins>
 
 If recipient is logged in: 
 
@@ -76,21 +76,21 @@ SENDER receives: “error: the recipient [RECIPIENT] does not exist, please have
 
 Assuming you have SENDER and RECIPIENT clients, run the following command: 
 
-**Run this command:** [in RECIPIENT terminal] `quit`
+<ins>Run this command:</ins> [in RECIPIENT terminal] `quit`
 
-**Expected result:**
+<ins>Expected result:</ins>
 
 “successfully quit / logged off”
 
-**Run this command:** [in SENDER terminal] `send_message_to [RECIPIENT] message: [INSERT MESSAGE]`
+<ins>Run this command:</ins> [in SENDER terminal] `send_message_to [RECIPIENT] message: [INSERT MESSAGE]`
 
-**Expected result:**
+<ins>Expected result:</ins>
 
 SENDER receives: "message will be sent to [RECIPIENT] when they log in"
 
-**Run this command:** [in RECIPIENT terminal] `log_in [RECIPIENT]`
+<ins>Run this command:</ins> [in RECIPIENT terminal] `log_in [RECIPIENT]`
 
-**Expected result:**
+<ins>Expected result:</ins>
 
 RECIPIENT receives: “[RECIPIENT] is successfully logged in!”
 RECIPIENT receives: “[SENDER] sent you a message: [MESSAGE]“
@@ -98,9 +98,9 @@ RECIPIENT receives: “[SENDER] sent you a message: [MESSAGE]“
 
 #### 5. Delete an account. You will need to specify the semantics of what happens if you attempt to delete an account that contains an undelivered message.
 
-**Run this command:** `delete_account [username]`
+<ins>Run this command:</ins> `delete_account [username]`
 
-**Expected result:** 
+<ins>Expected result:</ins> 
 
 “The account [username] has been successfully deleted.”
 
