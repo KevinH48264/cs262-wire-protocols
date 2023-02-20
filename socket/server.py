@@ -2,26 +2,22 @@ import socket
 import _thread
 import re
 
-'''
-accounts = { username: conn_var }
-queues = { username: [msgs] } 
-'''
+# insert the server computer's IP address and port here
+host = "10.250.109.126"
+port = 9999
+
+# this is the object that stores { username : connection (if logged in) } as a key : value dictionary that runs when the server starts, keeping track of all usernames and their connections if they are connected
 accounts = {}
+
+# this is the object that stores { username : [] (list of messages) } as a key : value dictionary that runs when the server starts, this tracks any messages in queue to be delivered to the user from others
 queues = {}
 
-# implement as txt file to retrieve from in the future
-def init():
-    # read from txt files accounts and queues
-    pass
-
-# Create a Socket ( connect two computers)
+# Create a Socket (connect client and server computers)
 def create_socket():
     try:
         global host
         global port
         global s
-        host = "10.250.109.126"
-        port = 9972
         s = socket.socket()
 
     except socket.error as msg:
@@ -50,17 +46,18 @@ def socket_accept():
         conn, address = s.accept()
         print("Connection has been established! |" + " IP " + address[0] + " | Port" + str(address[1]))
 
-        # allow for multiple connections to be made
+        # allow for multiple connections to be made using threads
         _thread.start_new_thread(receive_commands, (conn,))
-    s.close()
 
-# Send commands to client/victim or a friend
+# Send commands to client
 def receive_commands(conn):
     conn.send(str.encode("YOU ARE SUCCESSFULLY CONNECTED TO THE SERVER! Instructions here: 1. create_account [USERNAME] 2. show_accounts [USERNAME (optional)] 3. send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE] 5. delete_account [username] 6 (extra, logs you in): log_in [USERNAME] 7. (extra, logs you out): quit\n"))
-    # TODO: Edit this so that user can create account, and the other stuff.
 
+    # always listen for data from the client through the socket connection
     while True:
+        # debug statement to help maintain states of the protocol buffers
         print("current info: ", accounts, queues)
+
         data = conn.recv(1024)
         input_cmd = data.decode("utf-8")
         res = "Waiting for valid response..."
