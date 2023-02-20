@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+service ChatService {
+    rpc CreateAccount(Request) returns (Response) {}
+    rpc LogIn(Request) returns (Response) {}
+    rpc SendMessage(Request) returns (Response) {}
+    rpc ListAccounts(Request) returns (Response) {}
+    rpc DeleteAccount(Request) returns (Response) {}
+}
+
+message Request {
+    string request = 1;
+}
+
+message Response {
+    string response = 1;
+}
