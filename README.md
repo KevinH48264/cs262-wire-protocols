@@ -3,7 +3,6 @@ Design notebook: https://docs.google.com/document/d/1O02g64RKuSJvuYscbTvHQCIFWnb
 # Setup Instructions:
 
 ## Part 1:
-----------------------
 
 1. Navigate to `cs262-wire-protocols/socket`.
 
@@ -27,7 +26,6 @@ In`client.py`, set `server_ip_address` and `port` as the same ip address and por
 
 
 # Part 2:
-----------------------
 
 1. Navigate to `cs262-wire-protocols/grpc`.
 
