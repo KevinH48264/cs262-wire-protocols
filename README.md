@@ -4,7 +4,7 @@ Design notebook: https://docs.google.com/document/d/1O02g64RKuSJvuYscbTvHQCIFWnb
 
 ## Part 1:
 
-### 1. Navigate to `cs262-wire-protocols/socket`.
+#### 1. Navigate to `cs262-wire-protocols/socket`.
 
 2. Identify the ip address and port number of the computer that will run the server. In `server.py` on lines 23 and 24, set
 
