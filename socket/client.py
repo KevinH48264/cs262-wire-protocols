@@ -3,7 +3,7 @@ import sys
 
 # insert the server computer's IP address and port here
 host = '10.250.253.162'
-port = 9960
+port = 9945
 
 # create a socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -35,3 +35,4 @@ while True:
                 s.send(str.encode(cmd))
                 response = str(s.recv(1024),"utf-8")
                 print(response, end="")
+

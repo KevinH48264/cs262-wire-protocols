@@ -3,8 +3,8 @@ import _thread
 import re
 
 # insert the server computer's IP address and port here
-host = "10.250.109.126"
-port = 9991
+host = "10.250.253.162"
+port = 9934
 
 # this is the object that stores { username : connection (if logged in) } as a key : value dictionary that runs when the server starts, keeping track of all usernames and their connections if they are connected
 accounts = {}
@@ -130,15 +130,15 @@ def send_message(input_cmd, conn):
     if recipient in list(accounts.keys()): 
         # recipient exists
         recipient_conn = accounts[recipient]
-        
+        sender = list(accounts.keys())[list(accounts.values()).index(conn)]
+
         # recipient has an active connection and message is delivered, sender is notified of successful send
         if recipient_conn:
-            recipient_conn.send(str.encode(message))
+            recipient_conn.send(str.encode(sender + " sent you a message: " + message))
             res = "message successfully sent to {}".format(recipient)
 
         # recipient is offline and message should be stored in queue, sender is notified of status
         else:
-            sender = list(accounts.keys())[list(accounts.values()).index(conn)]
             queues[recipient].append(sender + " sent you a message: " + message)
             res = "message will be sent to {} when they log in".format(recipient)
     
