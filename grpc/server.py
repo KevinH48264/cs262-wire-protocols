@@ -6,8 +6,8 @@ import chat_pb2
 import chat_pb2_grpc
 
 # insert the server computer's IP address and port here
-ip = "10.250.253.162"
-port = "9999"
+ip = "10.250.109.126"
+port = "9998"
 
 class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
     def __init__(self):
@@ -114,10 +114,14 @@ class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
         return chat_pb2.Response(response="successfully quit / logged off")
 
 
-if __name__ == '__main__':
+def run_server():
+    print("starting server")
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)
     server.add_insecure_port(ip + ":" + port)
     server.start()
     print('Server is running...')
     server.wait_for_termination()
+
+if __name__ == '__main__':
+    run_server()
