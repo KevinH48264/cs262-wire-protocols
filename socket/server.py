@@ -4,7 +4,7 @@ import re
 
 # insert the server computer's IP address and port here
 host = "10.250.253.162"
-port = 9934
+port = 9895
 
 # this is the object that stores { username : connection (if logged in) } as a key : value dictionary that runs when the server starts, keeping track of all usernames and their connections if they are connected
 accounts = {}
@@ -82,12 +82,12 @@ def receive_commands(conn):
             res = log_in(username, conn)
 
             # Server delivers undelivered messages to a particular user if they logged in
-            check_queue(username, conn)
+            res += check_queue(username, conn)
 
         # Allow client to list accounts by text wildcard
         if 'show_accounts' in input_cmd:
             # show_accounts + space is 14 characters
-            username = input_cmd[14:]
+            username = input_cmd[14:].strip("\n")
             res = show_accounts(username)
 
         # Allow client to send a message to a recipient, and queue if the recipient isn't logged in
@@ -112,9 +112,12 @@ def receive_commands(conn):
 
 # send messages in queue to user when they log in, if they have messages. Once sent, remove message from queue
 def check_queue(user, conn):
+    messages = ""
     for msg in queues[user]:
-        conn.send(str.encode(msg))
+        #conn.send(str.encode(msg))
+        messages += "\n" + msg
         queues[user].remove(msg)
+    return messages
 
 # send a message from recipient to sender based on the input command from client
 def send_message(input_cmd, conn):
@@ -180,8 +183,9 @@ def delete_account(conn):
 # return all accounts that fulfill regex matching
 def show_accounts(search_input):
     regex = re.compile(search_input)
+    matches = []
     matches = [string for string in list(accounts.keys()) if re.match(regex, string) is not None]
-
+    print("matches:", matches)
     final_accounts = ""
     for i in range(len(matches)):
         final_accounts += matches[i] + " "
