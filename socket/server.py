@@ -4,7 +4,7 @@ import re
 
 # insert the server computer's IP address and port here
 host = "10.250.253.162"
-port = 9931
+port = 9900
 
 # this is the object that stores { username : connection (if logged in) } as a key : value dictionary that runs when the server starts, keeping track of all usernames and their connections if they are connected
 accounts = {}

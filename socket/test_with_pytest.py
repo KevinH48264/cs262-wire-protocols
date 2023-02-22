@@ -286,7 +286,7 @@ def test_send_message_when_logged_off():
     client_socket.close()
 
 
-# test create account
+# test delete account
 def test_delete_account():
     global host
     global port
@@ -314,7 +314,7 @@ def test_delete_account():
     client_socket.close()
     assert(response == "The account andy has been successfully deleted.\n")
 
-
+# test show_accounts after delete_account
 def test_show_accounts_after_deletion():
     global host
     global port

@@ -3,7 +3,7 @@ import sys
 
 # insert the server computer's IP address and port here
 host = '10.250.253.162'
-port = 9934
+port = 9900
 
 # create a socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

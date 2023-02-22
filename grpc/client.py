@@ -6,7 +6,7 @@ import sys
 
 # insert the server computer's IP address and port here
 server_ip_address = '10.250.253.162'
-port = 9999
+port = 9910
 
 def create_account(stub, cmd):
     return stub.CreateAccount(chat_pb2.Request(request=cmd))
