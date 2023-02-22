@@ -6,8 +6,8 @@ import chat_pb2
 import chat_pb2_grpc
 
 # insert the server computer's IP address and port here
-ip = "10.250.109.126"
-port = "9998"
+ip = "10.250.253.162"
+port = "9919"
 
 class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
     def __init__(self):
