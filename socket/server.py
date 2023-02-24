@@ -76,7 +76,7 @@ def receive_commands(conn):
             res = create_account(username, conn)
 
         # Allow clients to log in
-        if 'log_in' in input_cmd:
+        elif 'log_in' in input_cmd:
             # log_in + space is 7 characters
             username = input_cmd[7:].strip("\n")
             res = log_in(username, conn)
@@ -85,23 +85,23 @@ def receive_commands(conn):
             res += check_queue(username, conn)
 
         # Allow client to list accounts by text wildcard
-        if 'show_accounts' in input_cmd:
+        elif 'show_accounts' in input_cmd:
             # show_accounts + space is 14 characters
             username = input_cmd[14:].strip("\n")
             res = show_accounts(username)
 
         # Allow client to send a message to a recipient, and queue if the recipient isn't logged in
         # to send a message: "send_message_to [INSERT RECIPIENT] message: [INSERT MESSAGE]"
-        print(input_cmd)
-        if 'send_message_to' in input_cmd:
+        # print(input_cmd)
+        elif 'send_message_to' in input_cmd:
             res = send_message(input_cmd, conn)
 
         # Allow client to delete an account
-        if 'delete_account' in input_cmd:
+        elif 'delete_account' in input_cmd:
             res = delete_account(conn)
 
         # Allow clients to quit connection
-        if 'quit' in input_cmd[:4]:
+        elif 'quit' in input_cmd[:4]:
             # mark that the sender has closed their connection
             sender = list(accounts.keys())[list(accounts.values()).index(conn)]
             accounts[sender] = None
