@@ -51,15 +51,15 @@ def run():
                     if len(str.encode(cmd)) > 0:
                         if 'create_account' in cmd:
                             res = create_account(stub, cmd).response
-                        if 'log_in' in cmd:
+                        elif 'log_in' in cmd:
                             res = login(stub, cmd).response
-                        if 'show_accounts' in cmd:
+                        elif 'show_accounts' in cmd:
                             res = show_accounts(stub, cmd).response
-                        if 'send_message_to' in cmd:
+                        elif 'send_message_to' in cmd:
                             res = send_message_to(stub, cmd).response
-                        if 'delete_account' in cmd:
+                        elif 'delete_account' in cmd:
                             res = delete_account(stub, cmd).response
-                        if 'quit' in cmd:
+                        elif 'quit' in cmd:
                             res = quit(stub, cmd).response
                     print(res)
 
