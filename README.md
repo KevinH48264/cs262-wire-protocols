@@ -4,6 +4,8 @@ Specifications and Design notebook: https://docs.google.com/document/d/1O02g64RK
 
 ## Part 1:
 
+#### 0. Run "pip install grpcio protobuf grpcio-tools" to ensure you have the library requirements. 
+
 #### 1. Navigate to `cs262-wire-protocols/socket`.
 
 #### 2. Identify the ip address and port number of the computer that will run the server. In `server.py` on lines 23 and 24, set
